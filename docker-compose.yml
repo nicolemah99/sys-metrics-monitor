@@ -23,6 +23,10 @@ services:
     - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - influxdb
+    environment:
+      - INFLUX_TOKEN=${INFLUX_TOKEN}
+      - INFLUX_ORG=${INFLUX_ORG}
+      - INFLUX_BUCKET=${INFLUX_BUCKET}
 
   grafana:
     image: grafana/grafana:latest
