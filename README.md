@@ -42,32 +42,52 @@ SysMetrics Monitor components are accessible at the following URLs:
 ## Initial Setup
 ### InfluxDB
 Once InfluxDB is running:
-1. Navigate to http://localhost:8086 and complete the initial setup.
+1. Navigate to http://localhost:8086 and complete the initial setup
 2. Create an initial user, password, organization, and bucket.
-    - Use the values from the environment variables in the `.env` file.
-3. Generate a Read/Write Token for Telegraf and Grafana.
-    - Place the token in the `INFLUX_TOKEN` environment variable in the `.env` file.
+    - Use the values from the environment variables in the `.env` file
+3. Place the token that is generated into the `INFLUX_TOKEN` environment variable in the `.env` file
 
 ### Connecting InfluxDB to Grafana
-1. Access Grafana at http://localhost:3000.
-2. Log in and click on **Add your first data source**
-3. Choose InfluxDB and add the following:
+1. Access Grafana at http://localhost:3000
+2. Log in with the default login:
+```bash
+username: admin
+password: admin
+```
+3. You will be prompted to change the password, you can skip this, but if you choose to change the password you must update `GRAFANA_USER` and `GRAFANA_PASSWORD` in the `.env` file
+4. Click on **Add your first data source**
+5. Choose InfluxDB and add the following:
     - **Query language**: Flux
     - **URL**: `http://influxdb:8086`
     - **Organization**: `INFLUX_ORG` from `.env`
     - **Token**: `INFLUX_TOKEN` from `.env`
     - **Default Bucket**: `INFLUX_BUCKET` from `.env`
-4. Click **Save & test** 
-    - You should see a a green success box if the data source is properly configured.
+6. Click **Save & test** 
+    - You should see a a green success box if the data source is properly configured
 ![](grafana_influxdb_success.png)
 
-5. Restart containers to apply the changes:
+7. Restart containers to apply the changes:
 ```bash
 docker-compose restart
 ```
 
-## Create a Dashboard in Grafana
-- Go back to Grafana and create a new dashboard.
-- Add a panel and select the InfluxDB data source you added.
-- Create a query in the panel to visualize data from InfluxDB. You should see the data reflected in the panel if everything is set up correctly.
+## You're ready to create your first Dashboard
+1. Go back to the Grafana home page
+2. Click **Create your first dashboard**
+3. **Add visualization**, choose **influxdb**.
+4. You can now write [Flux Queries](https://docs.influxdata.com/influxdb/latest/query-data/get-started/)
+5. Verify Data is connected by running the following queries:
+```bash
 
+```
+
+## Tips
+1. Use Influxdb's *Data Explorer's* and *Scipript Editor* and *Query Builder* to create your desired Flux queries to use in your Grafana dashboard.
+2. Use the following **Flux** query to ensure you have data:
+
+This query lists the first 10 records from a your bucket, but sure to replace `INFLUX_BUCKET` with the name of your influx bucket.
+```
+from(bucket: "INFLUX_BUCKET")
+  |> range(start: -1h)  
+  |> limit(n: 10)
+```
