@@ -19,7 +19,7 @@ To clone the repository and run the application, follow these steps:
 
 ```bash
 # Clone the repository
-git clone https://github.com/nicolemah99/tig-stack.git
+git clone https://github.com/nicolemah99/sys-metrics-monitor.git
 
 # Navigate to the repository directory
 cd tig-stack
